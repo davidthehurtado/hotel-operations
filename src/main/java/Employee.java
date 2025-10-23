@@ -1,29 +1,43 @@
 public class Employee {
-    private int employeeId;
-    private String name;
-    private String department;
-    private double payRate;
-    private double hoursWorked;
+    int employeeId;
+    String name;
+    String department;
+    double payRate;
+    double hoursWorked;
+    double startTime;
 
-    // CONSTRUCTOR
-    public Employee(int employeeId, String name, String department, double payRate, double hoursWorked) {
-        this.employeeId = employeeId;
+    public Employee(int id, String name, String department, double payRate) {
+        this.employeeId = id;
         this.name = name;
         this.department = department;
         this.payRate = payRate;
-        this.hoursWorked = hoursWorked;
+        this.hoursWorked = 0;
+        this.startTime = 0;
     }
 
-    // DERIVED GETTERS
-    public double getRegularHours() {
-        return Math.min(hoursWorked, 40);
+    public boolean punchIn(double time) {
+        if (startTime != 0) {
+            System.out.println("Already punched in!");
+            return false;
+        }
+        startTime = time;
+        System.out.println(name + " punched in at " + time);
+        return true;
     }
 
-    public double getOvertimeHours() {
-        return Math.max(0, hoursWorked - 40);
+    public boolean punchOut(double time) {
+        if (startTime == 0) {
+            System.out.println("Must punch in first!");
+            return false;
+        }
+        double hours = time - startTime;
+        hoursWorked += hours;
+        startTime = 0;
+        System.out.println(name + " punched out at " + time + ". Hours worked: " + hours);
+        return true;
     }
 
-    public double getTotalPay() {
-        return (getRegularHours() * payRate) + (getOvertimeHours() * payRate * 1.5);
+    public double getHoursWorked() {
+        return hoursWorked;
     }
 }
